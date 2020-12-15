@@ -6,11 +6,12 @@ def images_path():
     return os.path.join(settings.LOCAL_FILE_DIR, 'images')
 
 class Project(models.Model):
+    id = models.IntegerField(primary_key=True)
     project_name = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
     description = models.TextField()
     duration = models.DurationField()
-    image = models.ImageField(upload_to='project_images/') 
+    image = models.ImageField(upload_to='project_images/', blank=True) 
 
     def __str__(self):
         return self.project_name
