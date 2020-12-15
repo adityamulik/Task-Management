@@ -5,6 +5,9 @@ from rest_framework.views import APIView
 from rest_framework.mixins import ListModelMixin
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.pagination import LimitOffsetPagination
+from rest_framework.authentication import BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 from .models import Project, Task
 from .serializers import ProjectSerializer
@@ -13,12 +16,22 @@ def landing_page(request):
     return render(request, 'taskmanagement/home.html')
 
 
-class ProjectList(APIView):
-    
+class ProjectList(APIView, LimitOffsetPagination):
+    """
+    View to list all the projects defined in the 
+    get request and paginated, post request returns 
+    a request and response cycle for creating a new 
+    Project.
+    """
+    authentication_classes = [BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
         projects = Project.objects.all()
-        serializer = ProjectSerializer(projects, many=True)
-        return Response(serializer.data)
+
+        projects_paginated = self.paginate_queryset(projects, request, view=self)
+        serializer = ProjectSerializer(projects_paginated, many=True)
+        return self.get_paginated_response(serializer.data)
 
     def post(self, request):
         serializer = ProjectSerializer(data=request.data)
@@ -29,7 +42,16 @@ class ProjectList(APIView):
 
 
 class ProjectDetails(APIView):
-    
+    """
+    View of individual Project is retrieved using 
+    the get_object function and individual project
+    is retrieved, a update or edit project request
+    is done using put and project is deleted using
+    delete method.
+    """
+    authentication_classes = [BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def get_object(self, pk):
         try:
             return Project.objects.get(pk=pk)
