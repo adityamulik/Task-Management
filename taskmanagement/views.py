@@ -1,20 +1,67 @@
-from django.shortcuts import render
-from django.http import HttpResponse, Http404
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import Http404
+from django.views import View
+from django.views.generic.list import ListView
+from django.views.generic.edit import CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from rest_framework.views import APIView
 from rest_framework.mixins import ListModelMixin
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.authentication import BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.generics import GenericAPIView
+from rest_framework.settings import api_settings
+from rest_framework.mixins import ListModelMixin
 
 from .models import Project, Task
 from .serializers import ProjectSerializer
+from .forms import ProjectForm
 
-def landing_page(request):
-    return render(request, 'taskmanagement/home.html')
 
+class HomePage(APIView, LoginRequiredMixin):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'taskmanagement/home.html'
+
+    def get(self, request):
+        """
+        View returns all active projects.
+        """
+        queryset = Project.objects.all()
+        form = ProjectForm()
+        print(queryset)
+        return Response({'projects': queryset, 'form': form})
+
+    # def post(self, request, pk):
+    #     """
+    #     Form displayed to create a new Project
+    #     """
+    #     # project = get_object_or_404(Project, pk=pk)
+    #     # serializer = ProjectSerializer(project, data=request.data)
+    #     # if not serializer.is_valid():
+    #     #     return Response({'serializer': serializer, 'project': project})
+    #     # serializer.save()
+    #     return redirect('taskmanagement:home')
+
+
+# class ProjectCreate(View):
+
+#     def get(self, request):
+#         """ Display an HTML Form """
+#         context = {"form": ProjectForm(), "update": False}
+#         return render(request, "taskmangement/project/form.html", context)
+
+#     def post(self, request):
+#         """ Handle form submission: save Project """
+#         project_form = ProjectForm(request.POST)
+#         if project_form.is_valid():
+#             project = project_form.save()
+#             return redirect(project.get_absolute_url())
+
+# API Views 
 
 class ProjectList(APIView, LimitOffsetPagination):
     """
@@ -78,5 +125,9 @@ class ProjectDetails(APIView):
 
 
 
-class ListTasks(ListModelMixin, APIView):
+class TasksList(ListModelMixin, APIView):
+    pass
+
+
+class TasksDetail(APIView):
     pass
