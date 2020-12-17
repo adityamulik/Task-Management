@@ -1,12 +1,23 @@
 from django.urls import path
-from .views import HomePage, ProjectList, ProjectDetails
+from . import views
+
+
 
 urlpatterns = [
-  path('', HomePage.as_view(), name="home"),
-  # path('project/<int:pk>', project, name="project"),
-  # path('task/<int:pk', task, name="task"),
+  path('', 
+      views.ProjectListView.as_view(), 
+      name="manage_project_list"),
+  path('create', 
+      views.ProjectCreateView.as_view(), 
+      name="project_create"),
+  path('<pk>/update', 
+      views.ProjectUpdateView.as_view(), 
+      name="project_update"),
+  path('<pk>/delete', 
+      views.ProjectDeleteView.as_view(), 
+      name="project_delete"),
 
   # APIs
-  path('api/projects/', ProjectList.as_view()),
-  path('api/projects/<int:pk>', ProjectDetails.as_view())
+  path('api/projects/', views.ProjectList.as_view()),
+  path('api/projects/<int:pk>', views.ProjectDetails.as_view())
 ]

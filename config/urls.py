@@ -6,7 +6,7 @@ from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     # TaskManagement Views
-    path('', include('taskmanagement.urls'), name="taskmanagement"),
+    path('', include('taskmanagement.urls')),
     # Auth Views
     path('accounts/login', auth_views.LoginView.as_view(), name="login"),
     path('accounts/logout', auth_views.LogoutView.as_view(), name="logout"),

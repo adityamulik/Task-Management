@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Task Management{% endblock %}
+
+{% block content %}
+  <h1>Projects List</h1>
+
+  <div class="module">
+    <p>
+      <a href="{% url 'project_create' %}" class="button">Create new project</a>
+    </p>
+    {% for project in object_list %}
+      <div class="course-info">
+        <h3><a href="{% url 'project_update' project.id %}">{{ project.title.title }}</a></h3>
+        <p>
+          <a href="{% url 'project_update' project.id %}">Edit</a>
+          <a href="{% url 'project_delete' project.id %}">Delete</a>
+          {% if project.modules.count > 0 %}
+            <a href="{% url 'project_list' project.modules.first.id %}">
+            Manage contents</a>
+          {% endif %}
+        </p>
+      </div>
+    {% empty %}
+      <p>You haven't created any projects yet.</p>
+    {% endfor %}
+  </div>
+{% endblock %}

@@ -3,9 +3,9 @@ from .models import Project, Task
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ['project_name', 'duration']
+    list_display = ['title', 'duration']
 
 
 @admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):
-    list_display = ['task_name', 'project', 'start_date', 'end_date']
+    list_display = ['title', 'project', 'start_date', 'end_date']

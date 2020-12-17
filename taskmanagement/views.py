@@ -1,65 +1,62 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render
 from django.http import Http404
-from django.views import View
+from django.urls import reverse_lazy
 from django.views.generic.list import ListView
-from django.views.generic.edit import CreateView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 from rest_framework.views import APIView
 from rest_framework.mixins import ListModelMixin
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.authentication import BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.generics import GenericAPIView
-from rest_framework.settings import api_settings
-from rest_framework.mixins import ListModelMixin
 
 from .models import Project, Task
 from .serializers import ProjectSerializer
-from .forms import ProjectForm
+from .forms import ModuleFormSet
 
 
-class HomePage(APIView, LoginRequiredMixin):
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'taskmanagement/home.html'
-
-    def get(self, request):
-        """
-        View returns all active projects.
-        """
-        queryset = Project.objects.all()
-        form = ProjectForm()
-        print(queryset)
-        return Response({'projects': queryset, 'form': form})
-
-    # def post(self, request, pk):
-    #     """
-    #     Form displayed to create a new Project
-    #     """
-    #     # project = get_object_or_404(Project, pk=pk)
-    #     # serializer = ProjectSerializer(project, data=request.data)
-    #     # if not serializer.is_valid():
-    #     #     return Response({'serializer': serializer, 'project': project})
-    #     # serializer.save()
-    #     return redirect('taskmanagement:home')
+class OwnerMixin(object):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.filter(owner=self.request.user)
 
 
-# class ProjectCreate(View):
+class OwnerEditMixin(object):
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
 
-#     def get(self, request):
-#         """ Display an HTML Form """
-#         context = {"form": ProjectForm(), "update": False}
-#         return render(request, "taskmangement/project/form.html", context)
 
-#     def post(self, request):
-#         """ Handle form submission: save Project """
-#         project_form = ProjectForm(request.POST)
-#         if project_form.is_valid():
-#             project = project_form.save()
-#             return redirect(project.get_absolute_url())
+class OwnerProjectMixin(OwnerMixin, LoginRequiredMixin, PermissionRequiredMixin):
+    model = Project
+    fields = ['title', 'description', 'duration', 'image']
+    success_url = reverse_lazy('manage_project_list')
+
+
+class OwnerProjectEditMixin(OwnerProjectMixin, OwnerEditMixin):
+    template_name = 'taskmanagement/project/form.html'
+
+
+class ProjectListView(OwnerProjectMixin, ListView):
+    template_name = 'taskmanagement/project/list.html'
+    permission_required = 'project.view_project'
+
+    
+class ProjectCreateView(OwnerProjectEditMixin, CreateView):
+    permission_required = 'project.add_project'
+    pass
+
+class ProjectUpdateView(OwnerProjectEditMixin, UpdateView):
+    permission_required = 'project.change_project'
+    pass
+
+class ProjectDeleteView(OwnerProjectMixin, DeleteView):
+    template_name = 'taskmanagement/project/delete.html'
+    permission_required = 'project.delete_project'
+
 
 # API Views 
 
