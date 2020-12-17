@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import Http404
 from django.urls import reverse_lazy
+from django.views import View
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
@@ -15,7 +16,6 @@ from rest_framework.permissions import IsAuthenticated
 
 from .models import Project, Task
 from .serializers import ProjectSerializer
-from .forms import ModuleFormSet
 
 
 class OwnerMixin(object):
@@ -43,6 +43,7 @@ class OwnerProjectEditMixin(OwnerProjectMixin, OwnerEditMixin):
 class ProjectListView(OwnerProjectMixin, ListView):
     template_name = 'taskmanagement/project/list.html'
     permission_required = 'project.view_project'
+    paginate_by = 3
 
     
 class ProjectCreateView(OwnerProjectEditMixin, CreateView):
@@ -57,6 +58,16 @@ class ProjectDeleteView(OwnerProjectMixin, DeleteView):
     template_name = 'taskmanagement/project/delete.html'
     permission_required = 'project.delete_project'
 
+
+class OwnerTaskMixin(OwnerMixin, LoginRequiredMixin, PermissionRequiredMixin):
+    model = Task
+    fields = ['title', 'description', 'start_date', 'end_date']
+    success_url = reverse_lazy('task')
+
+class TasksView(View):
+    
+    def get(self, request):
+        return(render, 'taskmanagement/task/list.html')
 
 # API Views 
 

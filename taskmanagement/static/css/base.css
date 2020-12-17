@@ -246,6 +246,12 @@ ul#course-modules li:hover {
     overflow:auto;
 }
 
+.float-child {
+    width: 50%;
+    float: left;
+    padding: 20px;
+}
+
 .course-info a {
     margin-right:10px;
 }
@@ -306,4 +312,15 @@ ul#course-modules li:hover {
     margin-right:2%;
     padding-left:0;
     padding-right:0;
+}
+
+.pagination {
+    display: block;
+}
+
+img {
+    vertical-align: middle;
+    border-style: none;
+    width: 150px;
+    height: 150px;
 }

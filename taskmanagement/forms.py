@@ -2,10 +2,7 @@ from django import forms
 from django.forms.models import inlineformset_factory
 from .models import Project, Task
 
-
-ModuleFormSet = inlineformset_factory(Project,
-                                      Task,
-                                      fields=['title',
-                                              'description'],
-                                      extra=2,
-                                      can_delete=True)
+class TaskForm(forms.ModelForm):
+    class Meta:
+        model = Task
+        fields = ['title', 'description', 'start_date', 'end_date']

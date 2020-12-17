@@ -11,7 +11,6 @@ class Project(models.Model):
                               related_name='project_created',
                               on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
-    slug = models.SlugField(max_length=200, unique=True)
     description = models.TextField()
     duration = models.DurationField()
     image = models.ImageField(upload_to='project_images/', blank=True) 
