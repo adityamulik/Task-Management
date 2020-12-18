@@ -1,13 +1,13 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import Http404
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic.list import ListView
+from django.views.generic.base import TemplateResponseMixin
+from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 from rest_framework.views import APIView
-from rest_framework.mixins import ListModelMixin
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.pagination import LimitOffsetPagination
@@ -15,7 +15,7 @@ from rest_framework.authentication import BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
 
 from .models import Project, Task
-from .serializers import ProjectSerializer
+from .serializers import ProjectSerializer, TaskSerializer
 
 
 class OwnerMixin(object):
@@ -48,26 +48,31 @@ class ProjectListView(OwnerProjectMixin, ListView):
     
 class ProjectCreateView(OwnerProjectEditMixin, CreateView):
     permission_required = 'project.add_project'
-    pass
+
 
 class ProjectUpdateView(OwnerProjectEditMixin, UpdateView):
     permission_required = 'project.change_project'
-    pass
+
 
 class ProjectDeleteView(OwnerProjectMixin, DeleteView):
     template_name = 'taskmanagement/project/delete.html'
     permission_required = 'project.delete_project'
 
 
-class OwnerTaskMixin(OwnerMixin, LoginRequiredMixin, PermissionRequiredMixin):
-    model = Task
-    fields = ['title', 'description', 'start_date', 'end_date']
-    success_url = reverse_lazy('task')
+class ProjectTaskUpdateView(TemplateResponseMixin, View):
+    template_name = 'taskmanagement/task/task_list.html'
+    project = None
 
-class TasksView(View):
-    
-    def get(self, request):
-        return(render, 'taskmanagement/task/list.html')
+    def dispatch(self, request, pk):
+        self.project = get_object_or_404(Project,
+                                        id=pk,
+                                        owner=request.user)
+
+        return super().dispatch(request, pk)
+
+    def get(self, request, *args, **kwargs):
+        return self.render_to_response({'project': self.project})
+
 
 # API Views 
 
@@ -133,8 +138,29 @@ class ProjectDetails(APIView):
 
 
 
-class TasksList(ListModelMixin, APIView):
-    pass
+class TaskList(APIView, LimitOffsetPagination):
+    """
+    View to list all the tasks associated with project
+    defined in the get request and paginated, post 
+    request returns a request and response cycle for 
+    creating a new Task.
+    """
+    authentication_classes = [BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        tasks = Task.objects.all()
+
+        tasks_paginated = self.paginate_queryset(tasks, request, view=self)
+        serializer = TaskSerializer(tasks_paginated, many=True)
+        return self.get_paginated_response(serializer.data)
+
+    def post(self, request):
+        serializer = TaskSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class TasksDetail(APIView):

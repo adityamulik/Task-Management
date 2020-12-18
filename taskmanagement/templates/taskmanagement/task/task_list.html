@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}
+  "{{ project.title }}" Tasks
+{% endblock %}
+{% block content %}
+  <h1>"{{ project.title }}" Tasks</h1>
+  <div class="module">
+    <p>
+      <a id="createTask" class="button">Create new task</a>
+    </p>
+    <h4>Task Lists</h4>
+    <ul id="taskList">
+      <!-- Ajax Call to display Task list of relevant project    -->
+    </ul>
+  </div>
+  <script>
+    let taskList = document.getElementById('taskList');
+  
+    // Fetch all Tasks
+    $.ajax({
+      type: 'GET',
+      url: "/api/tasks/",
+      success: function (response) {
+          response.results.forEach(item => {
+            if(item.project == "{{project.id}}") {
+              console.log(item);
+              taskList.innerHTML += `<li>
+                  <a href="#">
+                  ${item.title}
+                  </a>
+                  </li>`;
+            }
+          })
+      },
+      error: function (response) {
+          console.log(response)
+      }
+    })
+  
+    // Create Task
+  
+    const createTask = document.getElementById('createTask');
+
+    createTask.addEventListener('click', createNewTask);
+
+    function createNewTask(e) {
+        e.preventDefault();
+    }
+      
+  </script>
+{% endblock %}

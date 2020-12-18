@@ -17,13 +17,13 @@ urlpatterns = [
     path('<pk>/delete', 
         views.ProjectDeleteView.as_view(), 
         name="project_delete"),
-    path('<pk>/task',
-        views.TasksView.as_view(),
-        name="tasks"),
-
+    path('<pk>/task/',
+        views.ProjectTaskUpdateView.as_view(),
+        name='project_task_update'),
     # APIs
     path('api/projects/', views.ProjectList.as_view()),
-    path('api/projects/<int:pk>', views.ProjectDetails.as_view())
+    path('api/projects/<int:pk>', views.ProjectDetails.as_view()),
+    path('api/tasks/', views.TaskList.as_view()),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
