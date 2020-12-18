@@ -4,7 +4,7 @@ import django_heroku
 from django.core.exceptions import ImproperlyConfigured
 from .base import *
 
-DEBUG = False
+DEBUG = True
 
 SECRET_KEY = '&**mifsw3@hi_1an=!o76li#^av!#z2f3k4=5!9qohf%$)n6ke'
 
@@ -28,7 +28,7 @@ DATABASES['default'].update(db_from_env)
 
 # Static Files
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_DIRS = (
     'taskmanagement/static',
