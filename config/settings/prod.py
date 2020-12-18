@@ -2,7 +2,7 @@ import json, os
 from django.core.exceptions import ImproperlyConfigured
 from .base import *
 
-DEBUG = True
+DEBUG = False
 
 with open(os.path.join(BASE_DIR, 'secrets.json')) as secrets_file:
     secrets = json.load(secrets_file)
@@ -15,6 +15,15 @@ def get_secret(setting, secrets=secrets):
         raise ImproperlyConfigured("Set the {} setting".format(setting))
 
 SECRET_KEY = get_secret('SECRET_KEY')
+
+# Database
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
 
 # Static Files
 
