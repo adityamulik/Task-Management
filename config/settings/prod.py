@@ -1,6 +1,6 @@
 import json, os
 import dj_database_url
-import django_heroku
+# import django_heroku
 from django.core.exceptions import ImproperlyConfigured
 from .base import *
 
@@ -22,6 +22,7 @@ DATABASES = {
         'PORT': '',
     }
 }
+
 
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
