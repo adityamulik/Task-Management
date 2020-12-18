@@ -16,6 +16,8 @@ def get_secret(setting, secrets=secrets):
 
 SECRET_KEY = get_secret('SECRET_KEY')
 
+ALLOWED_HOSTS = []
+
 # Database
 
 DATABASES = {
