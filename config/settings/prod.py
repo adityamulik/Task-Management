@@ -4,7 +4,7 @@ import django_heroku
 from django.core.exceptions import ImproperlyConfigured
 from .base import *
 
-DEBUG = True
+DEBUG = False
 
 SECRET_KEY = '&**mifsw3@hi_1an=!o76li#^av!#z2f3k4=5!9qohf%$)n6ke'
 
