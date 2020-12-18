@@ -1,4 +1,6 @@
 import json, os
+import dj_database_url
+import django_heroku
 from django.core.exceptions import ImproperlyConfigured
 from .base import *
 
