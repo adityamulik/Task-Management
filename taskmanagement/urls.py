@@ -18,7 +18,7 @@ urlpatterns = [
         views.ProjectDeleteView.as_view(), 
         name="project_delete"),
     path('<pk>/task/',
-        views.ProjectTaskUpdateView.as_view(),
+        views.ProjectTaskListView.as_view(),
         name='project_task_update'),
     # APIs
     path('api/projects/', views.ProjectList.as_view()),

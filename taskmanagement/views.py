@@ -59,7 +59,7 @@ class ProjectDeleteView(OwnerProjectMixin, DeleteView):
     permission_required = 'project.delete_project'
 
 
-class ProjectTaskUpdateView(TemplateResponseMixin, View):
+class ProjectTaskListView(TemplateResponseMixin, View):
     template_name = 'taskmanagement/task/task_list.html'
     project = None
 
