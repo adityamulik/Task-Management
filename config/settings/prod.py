@@ -28,10 +28,10 @@ DATABASES['default'].update(db_from_env)
 
 # Static Files
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_DIRS = (
-    'taskmanagement/static',
+    os.path.join(BASE_DIR,'taskmanagement/static'),
 )
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
