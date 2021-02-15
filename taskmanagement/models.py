@@ -7,9 +7,13 @@ def images_path():
     return os.path.join(settings.LOCAL_FILE_DIR, 'images')
 
 class Project(models.Model):
+    """
+    Each individual projects consisting listed
+    tasks opened by individual users.
+    """
     owner = models.ForeignKey(User,
                               related_name='project_created',
-                              on_delete=models.CASCADE)
+                              on_delete=models.PROTECT)
     title = models.CharField(max_length=200)
     description = models.TextField()
     duration = models.DurationField()
@@ -20,9 +24,21 @@ class Project(models.Model):
 
 
 class Task(models.Model):
+    """
+    Each task opened by individual user in
+    a project.
+    """
+
+    STATUS = [
+        ('O', 'Open'),
+        ('P', 'In-progress'),
+        ('C', 'Closed'),
+    ]
+
     project = models.ForeignKey(Project, related_name='tasks', on_delete=models.CASCADE)
     title = models.CharField(max_length=250)
     description = models.TextField()
+    status = models.CharField(max_length=2, choices=STATUS)
     start_date = models.DateField()
     end_date = models.DateField()
 
