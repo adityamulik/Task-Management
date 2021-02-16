@@ -1,7 +1,12 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 from django.conf.urls.static import static
 from django.conf import settings
+
+from rest_framework import routers
+
+router = routers.DefaultRouter()
+router.register(r'projects', views.Projects, 'projects')
 
 
 urlpatterns = [
@@ -19,11 +24,12 @@ urlpatterns = [
         name="project_delete"),
     path('<pk>/task/',
         views.ProjectTaskListView.as_view(),
-        name='project_task_update'),
+        name='project_task_update'),    
     # APIs
-    path('api/projects/', views.ProjectList.as_view()),
-    path('api/projects/<int:pk>', views.ProjectDetails.as_view()),
-    path('api/tasks/', views.TaskList.as_view()),
+    path('api/', include('taskmanagement.routers')),
+    # path('api/projects/', views.ProjectList.as_view()),
+    # path('api/projects/<int:pk>', views.ProjectDetails.as_view()),
+    # path('api/tasks/', views.TaskList.as_view()),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

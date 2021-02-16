@@ -8,6 +8,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 from rest_framework.views import APIView
+from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.pagination import LimitOffsetPagination
@@ -76,29 +77,33 @@ class ProjectTaskListView(TemplateResponseMixin, View):
 
 # API Views 
 
-class ProjectList(APIView, LimitOffsetPagination):
-    """
-    View to list all the projects defined in the 
-    get request and paginated, post request returns 
-    a request and response cycle for creating a new 
-    Project.
-    """
-    authentication_classes = [BasicAuthentication]
-    permission_classes = [IsAuthenticated]
+class Projects(viewsets.ModelViewSet):
+    serializer_class = ProjectSerializer
+    queryset = Project.objects.all()
 
-    def get(self, request):
-        projects = Project.objects.all()
+# class ProjectList(APIView, LimitOffsetPagination):
+#     """
+#     View to list all the projects defined in the 
+#     get request and paginated, post request returns 
+#     a request and response cycle for creating a new 
+#     Project.
+#     """
+#     authentication_classes = [BasicAuthentication]
+#     permission_classes = [IsAuthenticated]
 
-        projects_paginated = self.paginate_queryset(projects, request, view=self)
-        serializer = ProjectSerializer(projects_paginated, many=True)
-        return self.get_paginated_response(serializer.data)
+#     def get(self, request):
+#         projects = Project.objects.all()
 
-    def post(self, request):
-        serializer = ProjectSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#         projects_paginated = self.paginate_queryset(projects, request, view=self)
+#         serializer = ProjectSerializer(projects_paginated, many=True)
+#         return self.get_paginated_response(serializer.data)
+
+#     def post(self, request):
+#         serializer = ProjectSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ProjectDetails(APIView):

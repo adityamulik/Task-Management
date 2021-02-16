@@ -43,11 +43,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Third Party Apps
-    'rest_framework',
+    'corsheaders',
+    'rest_framework',    
     'django_extensions',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -123,3 +125,7 @@ MEDIA_URL = '/media/'
 LOGIN_URL = 'accounts/login'
 
 LOGIN_REDIRECT_URL = 'manage_project_list'
+
+CORS_ORIGIN_WHITELIST = [
+    'https://localhost:3000'
+]
