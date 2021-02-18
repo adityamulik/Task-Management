@@ -41,7 +41,7 @@ const Projects = () => {
       },
       {
         Header: 'Status',
-        accessor: 'status'
+        accessor: 'status_display'
       },
       {
         Header: 'Owner',
