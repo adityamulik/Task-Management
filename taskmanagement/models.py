@@ -20,7 +20,7 @@ class Base(models.Model):
 
     def clean(self, *args, **kwargs):
         if self.due_date < self.start_date:
-            raise ValidationError("Date cannot be smaller than start date.")
+            raise ValidationError("Due date cannot be smaller than start date.")
         else:
             super().save(*args, **kwargs)
 
