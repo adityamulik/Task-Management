@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
+import ProjectTable from './ProjectTable';
 
 const Projects = () => {
 
@@ -16,14 +17,42 @@ const Projects = () => {
       })
   }, []);
 
+  const columns = useMemo(
+    () => 
+      [{
+        Header: 'ID',
+        accessor: 'project_id'
+      },
+      {
+        Header: 'Title',
+        accessor: 'title'
+      },
+      {
+        Header: 'Description',
+        accessor: 'description'
+      },
+      {
+        Header: 'Start Date',
+        accessor: 'start_date'
+      },
+      {
+        Header: 'Due Date',
+        accessor: 'due_date'
+      },
+      {
+        Header: 'Status',
+        accessor: 'status'
+      },
+      {
+        Header: 'Owner',
+        accessor: 'owner'
+      }]
+  )
+
   return (
     <div className="Projects">
       <h1>Project List</h1>
-      <ul>
-        {projects.map(project => 
-          <li key={project.project_id}>{project.title} : {project.description}</li>
-        )}
-      </ul>
+      <ProjectTable columns={columns} data={projects} />
     </div>
   )
 };
