@@ -37,7 +37,7 @@ class Project(Base):
     ]
 
     project_id = models.AutoField(primary_key=True,)
-    owner = models.ForeignKey(User,
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL,
                               related_name='project_created',
                               on_delete=models.PROTECT)
     status = models.CharField(max_length=2, choices=STATUS)
@@ -68,7 +68,7 @@ class Task(Base):
     ]
 
     task_id = models.AutoField(primary_key=True)
-    assignee = models.ForeignKey(User,
+    assignee = models.ForeignKey(settings.AUTH_USER_MODEL,
                               related_name='task_created',
                               on_delete=models.PROTECT)
     project = models.ForeignKey(Project, 
