@@ -3,10 +3,10 @@ from .models import Project, Task
 
 
 class ProjectSerializer(serializers.ModelSerializer):
-    
+
     class Meta:
         model = Project
-        fields = ['title', 'description', 'duration']
+        fields = "__all__"
 
 
 class TaskSerializer(serializers.ModelSerializer):
