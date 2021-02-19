@@ -10,7 +10,7 @@ const Projects = () => {
     axios.get('/api/projects/')
       .then(res => {
         console.log(res);
-        setProjects(res.data.results);
+        setProjects(res.data);
       })
       .catch(err => {
         console.log(err);

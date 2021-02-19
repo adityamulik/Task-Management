@@ -78,6 +78,7 @@ class ProjectTaskListView(TemplateResponseMixin, View):
 # API Views 
 
 class Projects(viewsets.ModelViewSet):
+    pagination_class = None
     serializer_class = ProjectSerializer
     queryset = Project.objects.all()
 
