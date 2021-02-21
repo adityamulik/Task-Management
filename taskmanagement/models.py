@@ -36,11 +36,13 @@ class Project(Base):
         ('IA' ,'Inactive'),
     ]
 
-    project_id = models.AutoField(primary_key=True,)
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL,
-                              related_name='project_created',
-                              on_delete=models.PROTECT)
-    status = models.CharField(max_length=2, choices=STATUS)
+    # project_id = models.AutoField(primary_key=True,)
+    # owner = models.ForeignKey(settings.AUTH_USER_MODEL,
+    #                           related_name='project_created',
+    #                           on_delete=models.PROTECT,
+    #                           blank=True,
+    #                           null=True)
+    status = models.CharField(max_length=2, choices=STATUS, blank=True)
 
     class Meta:
         db_table = "projects"

@@ -21,7 +21,7 @@ const Projects = () => {
     () => 
       [{
         Header: 'ID',
-        accessor: 'project_id'
+        accessor: 'id'
       },
       {
         Header: 'Title',
@@ -41,11 +41,7 @@ const Projects = () => {
       },
       {
         Header: 'Status',
-        accessor: 'status_display'
-      },
-      {
-        Header: 'Owner',
-        accessor: 'owner'
+        accessor: 'status'
       }]
   )
 

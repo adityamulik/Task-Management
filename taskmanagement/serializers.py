@@ -4,15 +4,9 @@ from .models import Project, Task
 
 class ProjectSerializer(serializers.ModelSerializer):
 
-    status_display = serializers.CharField(
-        source='get_status_display'
-    )
-
-    owner = serializers.CharField(source='owner.username')
-
     class Meta:
         model = Project
-        exclude = ["status"]
+        fields = "__all__"
 
 
 class TaskSerializer(serializers.ModelSerializer):
