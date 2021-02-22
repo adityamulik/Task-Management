@@ -4,8 +4,9 @@ from .models import Project, Task
 
 class ProjectSerializer(serializers.ModelSerializer):
 
-    status = serializers.CharField(
-        source="get_status_display"
+    status_display = serializers.CharField(
+        source="get_status_display",
+        read_only=True
     )
 
     class Meta:

@@ -10,13 +10,11 @@ function NewProjectModal(props){
     {
       "title": "",
       "description": "",
-      "start_date": "2013-02-12",
-      "due_date": "2012-03-12",
-      "status": "Active",
+      "start_date": "",
+      "due_date": "",
+      "status": "A",
     }
   );
-
-  console.log(sendData);
 
   const [startDate, setStartDate] = useState(new Date());
   const [dueDate, setDueDate] = useState(new Date());
@@ -54,15 +52,13 @@ function NewProjectModal(props){
     e.preventDefault();
     axios.post('/api/projects/', sendData)
       .then(response => {
-        if(response.status == 201) {
+        if(response.status === 201) {
           alert('New Project Created!')
           closeModal(); 
         }
       })
       .catch(error => console.log(error, "why?"))
   }; 
-
-  console.log(sendData);
  
   return (
     <div className="projectModal">
@@ -92,20 +88,18 @@ function NewProjectModal(props){
           <DatePicker 
             name="start_date"
             dateFormat="yyyy-MM-dd"
-            value={sendData.start_date}
             selected={startDate}
             onChange={date => setStartDate(date)}
           /><br/><br/>
           <DatePicker 
             name="due_date"
             dateFormat="yyyy-MM-dd"
-            value={sendData.due_date}
             selected={dueDate}
             onChange={date => setDueDate(date)}
           /><br/><br/>
           <select name="status" onChange={handleChange}>
-            <option name="Active" value="Active">Active</option>
-            <option name="Inactive" value="Inactive">Inactive</option>
+            <option name="Active" value="A">Active</option>
+            <option name="Inactive" value="IA">Inactive</option>
           </select><br/><br/>
           <button onClick={closeModal}>Cancel</button>
           <button type="submit">Save</button>
