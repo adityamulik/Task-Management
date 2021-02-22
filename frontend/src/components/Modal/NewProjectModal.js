@@ -12,7 +12,7 @@ function NewProjectModal(props){
       "description": "",
       "start_date": "2013-02-12",
       "due_date": "2012-03-12",
-      "status": "A",
+      "status": "Active",
     }
   );
 
@@ -103,9 +103,9 @@ function NewProjectModal(props){
             selected={dueDate}
             onChange={date => setDueDate(date)}
           /><br/><br/>
-          <select>
-            <option name="active" value="Active" onChange={handleChange}>Active</option>
-            <option name="inactive" value="Inactive">Inactive</option>
+          <select name="status" onChange={handleChange}>
+            <option name="Active" value="Active">Active</option>
+            <option name="Inactive" value="Inactive">Inactive</option>
           </select><br/><br/>
           <button onClick={closeModal}>Cancel</button>
           <button type="submit">Save</button>

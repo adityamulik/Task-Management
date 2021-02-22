@@ -4,6 +4,10 @@ from .models import Project, Task
 
 class ProjectSerializer(serializers.ModelSerializer):
 
+    status = serializers.CharField(
+        source="get_status_display"
+    )
+
     class Meta:
         model = Project
         fields = "__all__"
