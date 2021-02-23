@@ -3,9 +3,12 @@ import axios from 'axios';
 import Modal from 'react-modal';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import moment from 'moment';
 
 function NewProjectModal(props){
   const [modalIsOpen,setIsOpen] = useState(false);
+  const [startDate, setStartDate] = useState(new Date());
+  const [dueDate, setDueDate] = useState(new Date());
   const [sendData, setData] = useState(
     {
       "title": "",
@@ -15,9 +18,6 @@ function NewProjectModal(props){
       "status": "A",
     }
   );
-
-  const [startDate, setStartDate] = useState(new Date());
-  const [dueDate, setDueDate] = useState(new Date());
 
   const styleModal = {
     content : {
@@ -45,8 +45,13 @@ function NewProjectModal(props){
   } 
 
   const handleChange = (e) => {
-    setData({...sendData, [e.target.name]: e.target.value})
-  }
+    setData({
+      ...sendData, 
+      [e.target.name]: e.target.value, 
+      start_date: moment(startDate).format("yyyy-MM-DD"), 
+      due_date: moment(dueDate).format("yyyy-MM-DD")
+    })
+  };
 
   const createProject = (e) => {
     e.preventDefault();
