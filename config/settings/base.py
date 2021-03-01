@@ -27,7 +27,15 @@ ALLOWED_HOSTS = []
 REST_FRAMEWORK = {
     'DEFAULT_PARSER_CLASSES': [
         'rest_framework.parsers.JSONParser',
-    ]
+    ],
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ),
 }
 
 
@@ -36,6 +44,7 @@ REST_FRAMEWORK = {
 INSTALLED_APPS = [
     # First Party Apps
     'taskmanagement',
+    'core',
     # Defaults
     'django.contrib.admin',
     'django.contrib.auth',
@@ -130,3 +139,7 @@ LOGIN_REDIRECT_URL = 'manage_project_list'
 CORS_ORIGIN_WHITELIST = [
     'https://localhost:3000'
 ]
+
+JWT_AUTH = {
+    'JWT_RESPONSE_PAYLOAD_HANDLER': 'taskmanagement.utils.my_jwt_response_handler'
+}

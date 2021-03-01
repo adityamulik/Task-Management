@@ -80,6 +80,7 @@ class ProjectTaskListView(TemplateResponseMixin, View):
 class Projects(viewsets.ModelViewSet):
     serializer_class = ProjectSerializer
     queryset = Project.objects.all()
+    permission_classes = [IsAuthenticated]
 
 # class ProjectList(APIView, LimitOffsetPagination):
 #     """
